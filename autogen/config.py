@@ -101,25 +101,31 @@ class AgentConfig:
 
     RESEARCH_AGENT = {
         "name": "ResearchAgent",
-        "role": "Market Researcher",
+        "role": "Senior Market Intelligence Analyst",  # Modified: More specific title
         "temperature": 0.7,
     }
 
     ANALYSIS_AGENT = {
         "name": "AnalysisAgent",
-        "role": "Product Analyst",
+        "role": "Strategic Product Strategist",  # Modified: More strategic focus
         "temperature": 0.7,
     }
 
     BLUEPRINT_AGENT = {
         "name": "BlueprintAgent",
-        "role": "Product Designer",
+        "role": "UX/Product Design Architect",  # Modified: Emphasizes design
         "temperature": 0.7,
     }
 
     REVIEWER_AGENT = {
         "name": "ReviewerAgent",
-        "role": "Product Reviewer",
+        "role": "Executive Business Advisor",  # Modified: Executive level
+        "temperature": 0.7,
+    }
+
+    MARKETING_AGENT = {
+        "name": "MarketingAgent",
+        "role": "Growth Marketing Strategist",
         "temperature": 0.7,
     }
 
@@ -131,6 +137,7 @@ class AgentConfig:
             "analysis": cls.ANALYSIS_AGENT,
             "blueprint": cls.BLUEPRINT_AGENT,
             "reviewer": cls.REVIEWER_AGENT,
+            "marketing": cls.MARKETING_AGENT,
         }
         return agents.get(agent_type, {})
 
@@ -144,6 +151,7 @@ class WorkflowConfig:
         "analysis",
         "blueprint",
         "review",
+        "marketing",
     ]
 
     # Phase descriptions
@@ -152,6 +160,7 @@ class WorkflowConfig:
         "analysis": "Market Gap Analysis & Opportunities",
         "blueprint": "Product Blueprint Creation",
         "review": "Strategic Review & Recommendations",
+        "marketing": "Go-to-Market Strategy & Launch Plan",
     }
 
     # Task descriptions
@@ -160,6 +169,7 @@ class WorkflowConfig:
         "analysis": "Identify 3 key market opportunities and gaps",
         "blueprint": "Create product blueprint with features and user flows",
         "review": "Review blueprint and provide strategic recommendations",
+        "marketing": "Develop comprehensive marketing and launch strategy",
     }
 
     @classmethod

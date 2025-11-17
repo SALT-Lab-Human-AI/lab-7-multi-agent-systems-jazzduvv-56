@@ -6,7 +6,7 @@ It demonstrates multi-agent collaboration by having each agent generate response
 """
 
 from datetime import datetime
-from config import Config, WorkflowConfig
+from config import Config, WorkflowConfig, AgentConfig
 import json
 
 # Try to import OpenAI client
@@ -51,6 +51,9 @@ class SimpleInterviewPlatformWorkflow:
         # Phase 4: Review
         self.phase_review()
 
+        # Phase 5: Marketing
+        self.phase_marketing()
+
         # Summary
         self.print_summary()
 
@@ -59,9 +62,10 @@ class SimpleInterviewPlatformWorkflow:
         print("\n" + "="*80)
         print("PHASE 1: MARKET RESEARCH")
         print("="*80)
-        print("[ResearchAgent is analyzing the market...]")
+        agent_config = AgentConfig.get_agent_config("research")
+        print(f"[{agent_config['name']} ({agent_config['role']}) is analyzing the market...]")
 
-        system_prompt = """You are a market research analyst. Provide a brief analysis of
+        system_prompt = f"""You are a {agent_config['role']}. Provide a brief analysis of
 3 competitors in AI interview platforms (HireVue, Pymetrics, Codility).
 List their key features and identify market gaps in 150 words."""
 
@@ -78,7 +82,7 @@ List their key features and identify market gaps in 150 words."""
         )
 
         self.outputs["research"] = response.choices[0].message.content
-        print("\n[ResearchAgent Output]")
+        print(f"\n[{agent_config['name']} Output]")
         print(self.outputs["research"])
 
     def phase_analysis(self):
@@ -86,9 +90,10 @@ List their key features and identify market gaps in 150 words."""
         print("\n" + "="*80)
         print("PHASE 2: OPPORTUNITY ANALYSIS")
         print("="*80)
-        print("[AnalysisAgent is identifying opportunities...]")
+        agent_config = AgentConfig.get_agent_config("analysis")
+        print(f"[{agent_config['name']} ({agent_config['role']}) is identifying opportunities...]")
 
-        system_prompt = """You are a product analyst. Based on the market research provided,
+        system_prompt = f"""You are a {agent_config['role']}. Based on the market research provided,
 identify 3 key market opportunities or gaps for a new AI interview platform.
 Be concise in 150 words."""
 
@@ -108,7 +113,7 @@ Now identify market opportunities and gaps."""
         )
 
         self.outputs["analysis"] = response.choices[0].message.content
-        print("\n[AnalysisAgent Output]")
+        print(f"\n[{agent_config['name']} Output]")
         print(self.outputs["analysis"])
 
     def phase_blueprint(self):
@@ -116,9 +121,10 @@ Now identify market opportunities and gaps."""
         print("\n" + "="*80)
         print("PHASE 3: PRODUCT BLUEPRINT")
         print("="*80)
-        print("[BlueprintAgent is designing the product...]")
+        agent_config = AgentConfig.get_agent_config("blueprint")
+        print(f"[{agent_config['name']} ({agent_config['role']}) is designing the product...]")
 
-        system_prompt = """You are a product designer. Based on the market analysis and opportunities,
+        system_prompt = f"""You are a {agent_config['role']}. Based on the market analysis and opportunities,
 create a brief product blueprint including:
 - Key features (3-5)
 - User journey (2-3 steps)
@@ -140,7 +146,7 @@ Create a product blueprint for our platform."""
         )
 
         self.outputs["blueprint"] = response.choices[0].message.content
-        print("\n[BlueprintAgent Output]")
+        print(f"\n[{agent_config['name']} Output]")
         print(self.outputs["blueprint"])
 
     def phase_review(self):
@@ -148,9 +154,10 @@ Create a product blueprint for our platform."""
         print("\n" + "="*80)
         print("PHASE 4: STRATEGIC REVIEW")
         print("="*80)
-        print("[ReviewerAgent is providing recommendations...]")
+        agent_config = AgentConfig.get_agent_config("reviewer")
+        print(f"[{agent_config['name']} ({agent_config['role']}) is providing recommendations...]")
 
-        system_prompt = """You are a product reviewer and strategist. Review the product blueprint
+        system_prompt = f"""You are a {agent_config['role']}. Review the product blueprint
 and provide 3 strategic recommendations for success.
 Be concise - 150 words."""
 
@@ -170,8 +177,46 @@ Provide strategic review and recommendations."""
         )
 
         self.outputs["review"] = response.choices[0].message.content
-        print("\n[ReviewerAgent Output]")
+        print(f"\n[{agent_config['name']} Output]")
         print(self.outputs["review"])
+
+    def phase_marketing(self):
+        """Phase 5: Marketing Strategy"""
+        print("\n" + "="*80)
+        print("PHASE 5: MARKETING STRATEGY")
+        print("="*80)
+        agent_config = AgentConfig.get_agent_config("marketing")
+        print(f"[{agent_config['name']} ({agent_config['role']}) is developing marketing strategy...]")
+
+        system_prompt = f"""You are a {agent_config['role']}. Based on the product blueprint and strategic recommendations,
+create a comprehensive go-to-market strategy including:
+- Target customer segments (2-3)
+- Marketing channels and tactics
+- Pricing strategy
+- Launch timeline
+Keep it concise - 150 words."""
+
+        user_message = f"""Product Blueprint:
+{self.outputs['blueprint']}
+
+Strategic Recommendations:
+{self.outputs['review']}
+
+Develop a comprehensive marketing and launch strategy."""
+
+        response = self.client.chat.completions.create(
+            model=self.model,
+            temperature=Config.AGENT_TEMPERATURE,
+            max_tokens=Config.AGENT_MAX_TOKENS,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message}
+            ]
+        )
+
+        self.outputs["marketing"] = response.choices[0].message.content
+        print(f"\n[{agent_config['name']} Output]")
+        print(self.outputs["marketing"])
 
     def print_summary(self):
         """Print final summary"""
@@ -180,15 +225,22 @@ Provide strategic review and recommendations."""
         print("="*80)
 
         print("""
-This workflow demonstrated a 4-agent collaboration:
-1. ResearchAgent - Analyzed the market
-2. AnalysisAgent - Identified opportunities
-3. BlueprintAgent - Designed the product
-4. ReviewerAgent - Provided strategic recommendations
+This workflow demonstrated a 5-agent collaboration:
+1. {0} ({1}) - Analyzed the market
+2. {2} ({3}) - Identified opportunities
+3. {4} ({5}) - Designed the product
+4. {6} ({7}) - Provided strategic recommendations
+5. {8} ({9}) - Developed marketing strategy
 
 Each agent received context from the previous agent's output,
 demonstrating the sequential workflow pattern of AutoGen.
-""")
+""".format(
+    AgentConfig.RESEARCH_AGENT['name'], AgentConfig.RESEARCH_AGENT['role'],
+    AgentConfig.ANALYSIS_AGENT['name'], AgentConfig.ANALYSIS_AGENT['role'],
+    AgentConfig.BLUEPRINT_AGENT['name'], AgentConfig.BLUEPRINT_AGENT['role'],
+    AgentConfig.REVIEWER_AGENT['name'], AgentConfig.REVIEWER_AGENT['role'],
+    AgentConfig.MARKETING_AGENT['name'], AgentConfig.MARKETING_AGENT['role']
+))
 
         # Print full results
         print("\n" + "="*80)
@@ -214,6 +266,11 @@ demonstrating the sequential workflow pattern of AutoGen.
         print("PHASE 4: STRATEGIC REVIEW (Full Output)")
         print("-"*80)
         print(self.outputs["review"])
+        
+        print("\n" + "-"*80)
+        print("PHASE 5: MARKETING STRATEGY (Full Output)")
+        print("-"*80)
+        print(self.outputs["marketing"])
 
         # Save to file
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -244,6 +301,11 @@ demonstrating the sequential workflow pattern of AutoGen.
             f.write("PHASE 4: STRATEGIC REVIEW\n")
             f.write("-"*80 + "\n")
             f.write(self.outputs["review"] + "\n")
+            
+            f.write("\n" + "-"*80 + "\n")
+            f.write("PHASE 5: MARKETING STRATEGY\n")
+            f.write("-"*80 + "\n")
+            f.write(self.outputs["marketing"] + "\n")
         
         print(f"\n💾 Full results saved to: {output_file}")
 
