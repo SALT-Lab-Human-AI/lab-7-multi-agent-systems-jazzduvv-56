@@ -145,15 +145,18 @@ def search_travel_costs(destination: str) -> str:
 def create_flight_agent(destination: str, trip_dates: str):
     """Create the Flight Specialist agent with real research tools."""
     return Agent(
-        role="Flight Specialist",
+        role="Senior Aviation Logistics Coordinator",  # Modified: More specific and senior role
         goal=f"Research and recommend the best flight options for the {destination} trip "
              f"({trip_dates}), considering dates, airlines, prices, and flight durations. "
              f"Use real data from flight booking sites to provide accurate, current pricing.",
-        backstory="You are an experienced flight specialist with deep knowledge of "
-                  "airline schedules, pricing patterns, and travel routes. You excel at "
-                  "finding the best flight options that balance cost and convenience. "
-                  "You have booked thousands of flights and know the best times to fly. "
-                  "You always research current prices and use real booking site data.",
+        backstory="You are a seasoned Senior Aviation Logistics Coordinator with over 15 years of experience in "
+                  "global travel coordination. You have personally arranged flights for CEOs, celebrities, and "
+                  "high-profile clients, always securing the optimal balance of luxury, timing, and cost-efficiency. "
+                  "Your extensive network includes direct relationships with major airlines and booking platforms. "
+                  "You excel at navigating complex route options, understanding fare structures, and anticipating "
+                  "market fluctuations. You have booked over 10,000 international flights and know every trick "
+                  "for finding hidden fares and premium upgrades. You always cross-reference multiple booking sites "
+                  "and use real-time data to ensure your recommendations are based on current market conditions.",
         tools=[search_flight_prices],
         verbose=True,
         allow_delegation=False
@@ -172,15 +175,20 @@ def create_hotel_agent(destination: str, trip_dates: str):
         hotel_location = "Tokyo"
 
     return Agent(
-        role="Accommodation Specialist",
+        role="Luxury Hospitality Concierge",  # Modified: More premium positioning
         goal=f"Suggest top-rated hotels in {hotel_location} for the {destination} trip "
              f"({trip_dates}), considering amenities, location, and value for money. "
              f"Use real hotel data from booking sites with current prices and reviews.",
-        backstory="You are a seasoned accommodation expert with extensive knowledge of "
-                  "hotels worldwide. You understand traveler needs and can match them with "
-                  "perfect accommodations. You read reviews meticulously and know which "
-                  "hotels offer the best experience for different budgets. You always "
-                  "check current availability and actual guest reviews.",
+        backstory="You are an elite Luxury Hospitality Concierge who has personally inspected over 500 luxury properties "
+                  "worldwide and maintains exclusive relationships with hotel managers and concierge services. "
+                  "You understand the subtle differences between 'luxury' and 'ultra-luxury' accommodations, "
+                  "knowing which properties offer genuine five-star experiences versus those that merely claim it. "
+                  "Your expertise extends to understanding traveler psychographics - you can match personalities "
+                  "with perfect accommodations, from the business executive who needs productivity suites to the "
+                  "romantic couple seeking intimate boutique experiences. You read every guest review meticulously, "
+                  "distinguishing between authentic feedback and paid promotions. You have access to unpublished rates "
+                  "and can negotiate upgrades that typical travelers never know exist. You always verify current "
+                  "availability through multiple channels and provide honest assessments of value versus cost.",
         tools=[search_hotel_options],
         verbose=True,
         allow_delegation=False
@@ -190,15 +198,21 @@ def create_hotel_agent(destination: str, trip_dates: str):
 def create_itinerary_agent(destination: str, trip_duration: str):
     """Create the Travel Planner agent with real research tools."""
     return Agent(
-        role="Travel Planner",
+        role="Master Experience Curator",  # Modified: More creative and experiential focus
         goal=f"Create a detailed day-by-day travel plan with activities and attractions "
              f"that maximize the {destination} experience in {trip_duration}. "
              f"Use real current information about attractions, opening hours, and accessibility.",
-        backstory=f"You are a creative travel planner with a passion for {destination}. "
-                  f"You have extensive knowledge of {destination}'s attractions, culture, and hidden gems. "
-                  f"You create itineraries that are well-paced, exciting, and memorable. "
-                  f"You consider travel times, weather, and traveler preferences to craft the perfect journey. "
-                  f"You always verify current information about attractions and tours.",
+        backstory=f"You are a Master Experience Curator who has personally visited {destination} over 50 times, "
+                  f"exploring every corner from tourist traps to authentic local secrets. You hold certifications "
+                  f"in cultural tourism and have collaborated with local tourism boards to develop authentic experiences. "
+                  f"Your passion for {destination} extends beyond attractions - you understand the rhythm of its seasons, "
+                  f"the pulse of its local communities, and the stories behind every landmark. You create itineraries "
+                  f"that are not just schedules, but transformative journeys that create lasting memories. "
+                  f"You consider not just what to see, but how to experience it - the perfect lighting for photography, "
+                  f"the quiet hours for reflection, the local festivals that bring destinations to life. "
+                  f"You always verify current information about attractions, cross-reference multiple sources, "
+                  f"and include insider tips that guidebooks never mention. Your itineraries balance adventure with rest, "
+                  f"culture with relaxation, and must-see sights with hidden gems.",
         tools=[search_attractions_activities],
         verbose=True,
         allow_delegation=False
@@ -208,23 +222,48 @@ def create_itinerary_agent(destination: str, trip_duration: str):
 def create_budget_agent(destination: str):
     """Create the Financial Advisor agent with real cost research tools."""
     return Agent(
-        role="Financial Advisor",
+        role="Chief Travel Finance Strategist",  # Modified: More executive and strategic role
         goal=f"Calculate total trip costs for {destination} and identify cost-saving opportunities "
              f"while maintaining quality. Use real current pricing data for all expenses.",
-        backstory="You are a meticulous financial advisor specializing in travel budgeting. "
-                  "You can analyze costs across flights, accommodations, activities, and meals. "
-                  "You identify hidden costs and suggest smart ways to save money without "
-                  "compromising the travel experience. You research actual current prices "
-                  "and provide realistic budget estimates.",
+        backstory="You are a Chief Travel Finance Strategist who has managed multi-million dollar travel budgets "
+                  "for Fortune 500 companies and ultra-high-net-worth individuals. Your expertise spans currency "
+                  "hedging, dynamic pricing models, and sophisticated cost optimization strategies. You understand "
+                  "the psychology of pricing - why certain dates cost more, how demand curves affect fares, and "
+                  "where legitimate savings can be found without compromising quality. You have negotiated with "
+                  "travel suppliers worldwide and know the difference between 'discounts' and genuine value. "
+                  "Your analytical mind can break down complex travel costs into actionable insights, identifying "
+                  "not just obvious savings but also strategic opportunities like optimal booking timing and "
+                  "alternative routing that saves thousands. You research actual current prices across multiple "
+                  "platforms, validate cost estimates against real market data, and provide budget scenarios "
+                  "that balance luxury with fiscal responsibility. Your recommendations have saved clients "
+                  "hundreds of thousands of dollars while enhancing their travel experiences.",
         tools=[search_travel_costs],
         verbose=True,
         allow_delegation=False
     )
 
 
-# ============================================================================
-# TASK DEFINITIONS
-# ============================================================================
+def create_shopping_agent(destination: str, trip_duration: str):
+    """Create the Travel Shopping Advisor agent with real research tools."""
+    return Agent(
+        role="Personal Shopping Concierge",
+        goal=f"Create comprehensive packing lists and shopping recommendations for {destination} "
+             f"considering weather, activities, and cultural norms. Provide practical, personalized advice.",
+        backstory="You are a Personal Shopping Concierge with a global perspective on travel preparation. "
+                  "You have assisted thousands of travelers from all walks of life, from backpackers to luxury "
+                  "jet-setters, ensuring they have everything they need for their perfect trip. Your expertise "
+                  "covers weather-appropriate clothing, activity-specific gear, local shopping opportunities, "
+                  "and cultural considerations. You understand seasonal variations, regional customs, and the "
+                  "practical realities of travel logistics. You research current weather patterns, activity "
+                  "requirements, and local market conditions to provide tailored recommendations. Your packing "
+                  "lists are legendary for being comprehensive yet practical, and your shopping advice helps "
+                  "travelers find authentic local experiences while avoiding tourist traps. You consider budget "
+                  "constraints, travel style, and personal preferences to create truly personalized travel "
+                  "preparation plans.",
+        tools=[search_travel_costs],  # Reusing the cost search tool for shopping research
+        verbose=True,
+        allow_delegation=False
+    )
 
 def create_flight_task(flight_agent, destination: str, trip_dates: str, departure_city: str):
     """Define the flight research task using real data."""
@@ -304,6 +343,24 @@ def create_budget_task(budget_agent, destination: str, trip_duration: str):
     )
 
 
+def create_shopping_task(shopping_agent, destination: str, trip_duration: str, budget_preference: str):
+    """Define the shopping and packing preparation task."""
+    return Task(
+        description=f"Based on the itinerary and budget analysis for the {trip_duration} trip to {destination}, "
+                   f"create a comprehensive packing list and shopping guide. Research current weather conditions "
+                   f"for the destination during the travel period, activity requirements from the itinerary, "
+                   f"and local shopping opportunities. Consider the {budget_preference} budget level and provide "
+                   f"practical recommendations for clothing, gear, toiletries, and any special items needed. "
+                   f"Include tips for shopping locally, avoiding tourist traps, and finding authentic experiences. "
+                   f"Provide separate packing lists for different types of luggage (carry-on, checked baggage) "
+                   f"and consider airline restrictions.",
+        agent=shopping_agent,
+        expected_output=f"A detailed packing and shopping guide for {destination} including weather-appropriate "
+                       f"clothing recommendations, activity-specific gear, local shopping tips, budget-conscious "
+                       f"purchasing advice, and organized packing lists for a {trip_duration} trip"
+    )
+
+
 # ============================================================================
 # CREW ORCHESTRATION
 # ============================================================================
@@ -361,17 +418,20 @@ def main(destination: str = "Iceland", trip_duration: str = "5 days",
     print()
 
     # Create agents with destination parameters
-    print("[1/4] Creating Flight Specialist Agent (researches real flights)...")
+    print("[1/5] Creating Flight Specialist Agent (researches real flights)...")
     flight_agent = create_flight_agent(destination, trip_dates)
 
-    print("[2/4] Creating Accommodation Specialist Agent (researches real hotels)...")
+    print("[2/5] Creating Accommodation Specialist Agent (researches real hotels)...")
     hotel_agent = create_hotel_agent(destination, trip_dates)
 
-    print("[3/4] Creating Travel Planner Agent (researches real attractions)...")
+    print("[3/5] Creating Travel Planner Agent (researches real attractions)...")
     itinerary_agent = create_itinerary_agent(destination, trip_duration)
 
-    print("[4/4] Creating Financial Advisor Agent (analyzes real costs)...")
+    print("[4/5] Creating Financial Advisor Agent (analyzes real costs)...")
     budget_agent = create_budget_agent(destination)
+
+    print("[5/5] Creating Shopping Concierge Agent (packing and shopping advice)...")
+    shopping_agent = create_shopping_agent(destination, trip_duration)
 
     print("\n✅ All agents created successfully!")
     print()
@@ -382,18 +442,19 @@ def main(destination: str = "Iceland", trip_duration: str = "5 days",
     hotel_task = create_hotel_task(hotel_agent, destination, trip_dates)
     itinerary_task = create_itinerary_task(itinerary_agent, destination, trip_duration, trip_dates)
     budget_task = create_budget_task(budget_agent, destination, trip_duration)
+    shopping_task = create_shopping_task(shopping_agent, destination, trip_duration, budget_preference)
 
     print("Tasks created successfully!")
     print()
 
     # Create the crew with sequential task execution
     print("Forming the Travel Planning Crew...")
-    print("Task Sequence: FlightAgent → HotelAgent → ItineraryAgent → BudgetAgent")
+    print("Task Sequence: FlightAgent → HotelAgent → ItineraryAgent → BudgetAgent → ShoppingAgent")
     print()
 
     crew = Crew(
-        agents=[flight_agent, hotel_agent, itinerary_agent, budget_agent],
-        tasks=[flight_task, hotel_task, itinerary_task, budget_task],
+        agents=[flight_agent, hotel_agent, itinerary_agent, budget_agent, shopping_agent],
+        tasks=[flight_task, hotel_task, itinerary_task, budget_task, shopping_task],
         verbose=True,
         process="sequential"  # Sequential task execution
     )
